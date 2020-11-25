@@ -34,7 +34,7 @@ Ideally only around 2 hours is spent on the core task.  Suggest keeping the desi
 
 ## Preparation
 - You can find the Rocos JS SDK documentation from https://sdk.rocos.io/js/docs/.
-- You can play the demo application located within `./demo` folder. (The demo project id is `front-end-challenge`)
+- You can play the demo application located within `./demo` folder. (The project id used within the demo is `front-end-challenge`)
 - You can email `jing.li@rocos.io` to request the `Application ID` and `Application Secret` for running the demo application and building your application.
 
 ## Tech stack:

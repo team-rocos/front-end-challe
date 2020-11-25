@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <script src="./rocos.js"></script>
+  <title>Rocos-JS Demo</title>
+</head>
+
+<body>
+  <div class="container">
+    <h1>RocosJS Demo</h1>
+    <p>Doc: <a
+        href="https://sdk.rocos.io/js/docs/globals.html">https://sdk.rocos.io/js/docs/globals.html</a></p>
+    <hr>
+
+    <script>
+      var baseURL = 'https://api2.rocos.io';
+
+      // Create a rocos client instand.
+      // Ref: https://sdk.rocos.io/js/docs/classes/rocosclient.html
+      var rocosClient = new rocosJS.RocosClient({
+        baseURL: baseURL,
+      });
+
+      // Create a telemetry mangaer
+      // Ref: https://sdk.rocos.io/js/docs/classes/fastlanemanager.html
+      var fastLaneManager = new rocosJS.FastLaneManager(baseURL);
+
+      // Create a robot controller
+      // Ref: https://sdk.rocos.io/js/docs/classes/robotcontroller.html
+      var robotController = new rocosJS.RobotController(baseURL);
+    </script>
+
+    <!--
+    // ----------------------------------------------------------------------------
+    // Get Token
+    // ---------------------------------------------------------------------------- -->
+    <div>
+      <h2>
+        Get Token
+      </h2>
+
+      Related APIs:
+      <ul>
+        <li>Get token with application id and key: <a href="https://sdk.rocos.io/js/docs/classes/userservice.html#applicationauth">https://sdk.rocos.io/js/docs/classes/userservice.html#applicationauth</a></li>
+      </ul>
+
+      <form>
+        <div class="form-group">
+          <label for="response-application-id">Application Id</label>
+          <input type="text" class="form-control" id="response-application-id" value="">
+        </div>
+        <div class="form-group">
+          <label for="response-application-secret-key">Secret Key</label>
+          <input type="text" class="form-control" id="response-application-secret-key" value="*********">
+        </div>
+        <button type="button" class="btn btn-primary" id="get-token-button">Get Token</button>
+      </form>
+
+      <div class="mt-3 alert alert-info" style="max-height: 200px; overflow: auto;" role="alert">
+        RESPONSE:
+        <pre id="get-toke-result">--</pre>
+      </div>
+
+      <form>
+        <div class="form-group">
+          <label for="token">Token</label>
+          <input type="text" class="form-control" id="token">
+        </div>
+        <button type="button" class="btn btn-primary" id="update-token-button">Update Token</button>
+      </form>
+
+      <script>
+        // Get token
+        document.getElementById('get-token-button').onclick = () => {
+          var appId = document.getElementById("response-application-id").value;
+          var secretKey = document.getElementById("response-application-secret-key").value;
+
+          console.log(`Get token with application id: ${appId} and secret key: ${secretKey}.`);
+
+          // Get toke with applicatio id and key.
+          // Ref: https://sdk.rocos.io/js/docs/classes/userservice.html#applicationauth
+          rocosClient.user.applicationAuth(
+            appId,
+            secretKey,
+          ).subscribe((res) => {
+            console.log('result', res);
+            var resString = JSON.stringify(res, null, 2);
+            document.getElementById('get-toke-result').innerText = resString;
+
+            // Get token from the result
+            var token = res.data.token;
+            document.getElementById('token').value = token;
+
+            // Update token
+            // IMPORTANT !!!
+            rocosClient.updateToken(token); // Ref: https://sdk.rocos.io/js/docs/classes/rocosclient.html#updatetoken
+            fastLaneManager.updateToken(token); // Ref: https://sdk.rocos.io/js/docs/classes/fastlanemanager.html#updatetoken
+            robotController.updateToken(token); // Ref: https://sdk.rocos.io/js/docs/classes/robotcontroller.html#updatetoken
+          }, (err) => {
+            console.error('error', err);
+          });
+        };
+
+        // Update token
+        document.getElementById('update-token-button').onclick = () => {
+          var token = document.getElementById("token").value;
+
+          console.log('Update token to:', token);
+
+          // Update token
+          // IMPORTANT !!!
+          rocosClient.updateToken(token); // Ref: https://sdk.rocos.io/js/docs/classes/rocosclient.html#updatetoken
+          fastLaneManager.updateToken(token); // Ref: https://sdk.rocos.io/js/docs/classes/fastlanemanager.html#updatetoken
+          robotController.updateToken(token); // Ref: https://sdk.rocos.io/js/docs/classes/robotcontroller.html#updatetoken
+        };
+      </script>
+      <hr>
+    </div>
+
+    <!--
+    // ----------------------------------------------------------------------------
+    // Example 1 - List All Robots
+    // ---------------------------------------------------------------------------- -->
+    <div>
+      <h2>
+        Example 1
+        <small>List All Robots</small>
+      </h2>
+
+      Related APIs:
+      <ul>
+        <li>List Robots: <a href="https://sdk.rocos.io/js/docs/classes/robotservice.html#list">https://sdk.rocos.io/js/docs/classes/robotservice.html#list</a></li>
+      </ul>
+
+      <form>
+        <div class="form-group">
+          <label for="project-id">Project Id</label>
+          <input type="text" class="form-control" id="project-id">
+        </div>
+        <button type="button" class="btn btn-primary" id="list-robot-button">Request</button>
+      </form>
+
+      Robot List:
+      <ul class="list-group" id="robot-list">
+      </ul>
+
+      <div class="mt-3 alert alert-info" style="max-height: 200px; overflow: auto;" role="alert">
+        RESPONSE:
+        <pre id="list-robots-result">--</pre>
+      </div>
+
+      <script>
+        document.getElementById('list-robot-button').onclick = () => {
+          var projectId = document.getElementById("project-id").value;
+
+          console.log('list robots with project id', projectId);
+
+          // List all robots
+          // Ref: https://sdk.rocos.io/js/docs/classes/robotservice.html#list
+          rocosClient.robot.list(projectId).subscribe((res) => {
+            console.log('result', res);
+            var resString = JSON.stringify(res, null, 2);
+            document.getElementById('list-robots-result').innerText = resString;
+
+            // Get robots
+            var robots = res.data;
+
+            if (robots && robots.length > 0) {
+              // Add each robot to the robot list
+              robots.forEach((robot) => {
+                var node = document.createElement("li");
+                node.classList.add("list-group-item");
+                var textnode = document.createTextNode(`${robot.name} (${robot.callsign})`);
+                node.appendChild(textnode);
+
+                document.getElementById("robot-list").appendChild(node);
+              });
+
+              document.getElementById("callsigns").value = robots[0].callsign;
+            }
+
+          }, (err) => {
+            console.error('error', err);
+          });
+        };
+      </script>
+
+      <hr>
+    </div>
+
+    <!--
+    // ----------------------------------------------------------------------------
+    // Example 2 - Subscribe and Unsubscribe Telemetry
+    // ---------------------------------------------------------------------------- -->
+    <div>
+      <h2>
+        Example 2
+        <small>Subscribe and Unsubscribe Telemetry</small>
+      </h2>
+
+      Related APIs:
+      <ul>
+        <li>FastLaneManager subscribe: <a href="https://sdk.rocos.io/js/docs/classes/fastlanemanager.html#subscribe">https://sdk.rocos.io/js/docs/classes/fastlanemanager.html#subscribe</a></li>
+        <li>FastLaneManager unsubscribe: <a href="https://sdk.rocos.io/js/docs/classes/fastlanemanager.html#unsubscribe">https://sdk.rocos.io/js/docs/classes/fastlanemanager.html#unsubscribe</a></li>
+      </ul>
+
+      <form>
+        <div class="form-group">
+          <label for="callsigns">Callsigns</label>
+          <input type="text" class="form-control" id="callsigns">
+        </div>
+        <div class="form-group">
+          <label for="sources">Sources</label>
+          <input type="text" class="form-control" id="sources"
+            value="/rocos/agent/telemetry/heartbeat,/rocos/agent/telemetry/sources">
+        </div>
+        <button type="button" class="btn btn-primary" id="subscribe-button">Subscribe</button>
+
+        <div class="mt-3 alert alert-info" style="max-height: 400px; overflow: auto;" role="alert">
+          MESSAGE:
+          <pre id="msg-result">--</pre>
+        </div>
+      </form>
+
+
+      <script>
+        document.getElementById('subscribe-button').onclick = () => {
+          var projectId = document.getElementById("project-id").value;
+          var callsigns = document.getElementById("callsigns").value.split(','); // Callsigns should be an array
+          var sources = document.getElementById("sources").value.split(','); // Sources should be an array
+
+          console.log('subscribe with projectId', projectId, 'callsigns', callsigns, 'sources', sources);
+
+          // Get subscriber
+          // Ref: https://sdk.rocos.io/js/docs/classes/fastlanemanager.html#subscribe
+          var subscriber = fastLaneManager.subscribe(
+            projectId,
+            callsigns,
+            sources,
+          );
+
+          // Subscribe
+          subscriber.subject.subscribe((msg) => {
+            console.log('msg', msg);
+            var msgString = JSON.stringify(msg, null, 2);
+            document.getElementById('msg-result').innerText = msgString;
+          });
+
+          // Fill subscription unique id
+          document.getElementById("sub-unique-id").value = subscriber.uniqueId;
+        };
+      </script>
+
+      <form>
+        <div class="form-group">
+          <label for="sub-unique-id">Subscription Unique Id</label>
+          <input type="text" class="form-control" id="sub-unique-id" placeholder="Will be filled">
+        </div>
+        <button type="button" class="btn btn-secondary" id="unsubscribe-button">Unsubscribe</button>
+      </form>
+
+      <script>
+        document.getElementById('unsubscribe-button').onclick = () => {
+          var uniqueId = document.getElementById("sub-unique-id").value;
+
+          // Unsubscribe
+          // Ref: https://sdk.rocos.io/js/docs/classes/fastlanemanager.html#unsubscribe
+          fastLaneManager.unsubscribe(uniqueId);
+
+        };
+      </script>
+      <hr>
+    </div>
+  </div>
+</body>
+
+</html>

@@ -40,4 +40,4 @@ Ideally only around 2 hours is spent on the core task.  Suggest keeping the desi
 ## Tech stack:
 - Angular (Latest version 10+)
 - RxJS Observables with Rocos JS SDK (demonstrate use of our streaming data)
-- Each gauge should be an angular component
+- Each gauge should be an angular component. (Prefer native canvas implementation) 

@@ -30,7 +30,7 @@ The reason this is important to Rocos is that we have live connections to autono
 
 ## Time:
 
-Ideally only around 2 hours is spent on the core task.  Suggest keeping the design to a minimum not to take up too much time.  Some research time before hand may be required on streaming technology like RxJS or upskilling on Angular to build a simple application, services and components.
+Ideally less than 4 hours is spent on the core task.  Suggest keeping the design to a minimum not to take up too much time.  Some research time before hand may be required on streaming technology like RxJS or upskilling on Angular to build a simple application, services and components.
 
 ## Preparation
 - You can find the Rocos JS SDK documentation from https://sdk.rocos.io/js/docs/.
@@ -41,3 +41,4 @@ Ideally only around 2 hours is spent on the core task.  Suggest keeping the desi
 - Angular (Latest version 10+)
 - RxJS Observables with Rocos JS SDK (demonstrate use of our streaming data)
 - Each gauge should be an angular component. (Prefer native canvas implementation) 
+- Please use canvas with animation to create the gauges.

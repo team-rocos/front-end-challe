@@ -34,8 +34,8 @@ Ideally less than 4 hours is spent on the core task.  Suggest keeping the design
 
 ## Preparation
 - You can find the Rocos JS SDK documentation from https://docs.rocos.io/docs/node-js-sdk. 
- - Add a `.npmrc` to your project, in the same directory as your `package.json`
- - Add `@rocos:registry=https://pkgs.dev.azure.com/team-rocos/c46363e8-3452-44ca-ab9 f-cd9f31880b59/_packaging/rocos-npm-public/npm/registry/` into your `.npmrc` file
+-- Add a `.npmrc` to your project, in the same directory as your `package.json`
+-- Add `@rocos:registry=https://pkgs.dev.azure.com/team-rocos/c46363e8-3452-44ca-ab9 f-cd9f31880b59/_packaging/rocos-npm-public/npm/registry/` into your `.npmrc` file
 - You can play the demo application located within `./demo` folder. (The project id used within the demo is `front-end-challenge`)
 - You can email `jing.li@rocos.io` to request the `Application ID` and `Application Secret` for running the demo application and building your application.
 

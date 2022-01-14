@@ -30,7 +30,7 @@ The reason this is important to Rocos is that we have live connections to autono
 
 ## Time:
 
-Ideally less than 4 hours is spent on the core task.  Suggest keeping the design to a minimum not to take up too much time.  Some research time before hand may be required on streaming technology like RxJS or upskilling on Angular to build a simple application, services and components.
+Ideally less than 8 hours is spent on the core task.  Suggest keeping the design to a minimum not to take up too much time.  Some research time before hand may be required on streaming technology like RxJS or upskilling on Angular to build a simple application, services and components.
 
 ## Preparation
 - You can find the Rocos JS SDK documentation from https://docs.rocos.io/docs/node-js-sdk. 
